@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { RowData } from "../types";
+import { toast } from "sonner";
+import { Button } from "./Button";
+import { Input } from "./Input";
 
 export const Row = ({
   row,
@@ -15,7 +18,10 @@ export const Row = ({
   const variance = ((row.value - row.initialValue) / row.initialValue) * 100;
 
   const onDataChange = (type: "perc" | "val", id: string) => {
-    if (!inputVal) return;
+    if (!inputVal) {
+      toast.error("Please enter a value");
+      return;
+    }
     if (type === "perc") {
       const percentage = parseFloat(inputVal) / 100;
       setRowData((prevData) =>
@@ -62,22 +68,19 @@ export const Row = ({
         <td className="border p-2">{label}</td>
         <td className="border p-2">{row.value.toFixed(2)}</td>
         <td className="border p-2">
-          <input
-            type="number"
-            className="w-full border border-gray-800 p-3"
-            value={inputVal}
-            onChange={(e) => setInputVal(e.target.value)}
+          <Input type="number" value={inputVal} setInputVal={setInputVal} />
+        </td>
+        <td className="border p-2">
+          <Button
+            onClick={() => onDataChange("perc", row.id)}
+            label="Allocate %"
           />
         </td>
         <td className="border p-2">
-          <button onClick={() => onDataChange("perc", row.id)}>
-            Allocate %
-          </button>
-        </td>
-        <td className="border p-2">
-          <button onClick={() => onDataChange("val", row.id)}>
-            Allocate Val
-          </button>
+          <Button
+            onClick={() => onDataChange("val", row.id)}
+            label="Allocate Val"
+          />
         </td>
         <td className="border p-2">{variance.toFixed(2)}</td>
       </tr>
