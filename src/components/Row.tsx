@@ -1,31 +1,29 @@
 import { useState } from "react";
-import { RowData } from "./types";
+import { RowData } from "../types";
 
 export const Row = ({
   row,
-  setParentVal,
   setRowData,
+  label,
 }: {
   row: RowData;
-  parentVal?: number;
-  setParentVal?: React.Dispatch<React.SetStateAction<number>>;
   setRowData: React.Dispatch<React.SetStateAction<RowData[]>>;
+  label: string;
 }) => {
   const [inputVal, setInputVal] = useState("");
-  const [variance, setVariance] = useState("0");
+
+  const variance = ((row.value - row.initialValue) / row.initialValue) * 100;
 
   const onDataChange = (type: "perc" | "val", id: string) => {
+    if (!inputVal) return;
     if (type === "perc") {
       const percentage = parseFloat(inputVal) / 100;
       setRowData((prevData) =>
         updateValue(prevData, id, (val: number) => val + val * percentage),
       );
     } else {
-      setVariance(
-        (((Number(inputVal) - row.value) / row.value) * 100).toFixed(2),
-      );
-      setParentVal?.((prev) =>
-        prev ? prev + Number(inputVal) - row.value : Number(inputVal),
+      setRowData((prevData) =>
+        updateValue(prevData, id, () => Number(inputVal)),
       );
     }
   };
@@ -60,16 +58,13 @@ export const Row = ({
 
   return (
     <>
-      <tr className="hover:bg-gray-100">
-        <td className="border p-2">
-          {!row?.children && "-- "}
-          {row.label}
-        </td>
-        <td className="border p-2">{row.value}</td>
+      <tr className="border  hover:bg-gray-100">
+        <td className="border p-2">{label}</td>
+        <td className="border p-2">{row.value.toFixed(2)}</td>
         <td className="border p-2">
           <input
             type="number"
-            className="w-full"
+            className="w-full border border-gray-800 p-3"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
           />
@@ -84,10 +79,15 @@ export const Row = ({
             Allocate Val
           </button>
         </td>
-        <td className="border p-2">{variance}</td>
+        <td className="border p-2">{variance.toFixed(2)}</td>
       </tr>
       {row?.children?.map((rowChild) => (
-        <Row row={rowChild} setRowData={setRowData} />
+        <Row
+          key={rowChild.id}
+          row={rowChild}
+          setRowData={setRowData}
+          label={`-- ${rowChild.label}`}
+        />
       ))}
     </>
   );

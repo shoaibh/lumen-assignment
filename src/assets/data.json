@@ -4,16 +4,19 @@
             "id": "electronics",
             "label": "Electronics",
             "value": 1500,
+            "initialValue": 1500,
             "children": [
                 {
                     "id": "phones",
                     "label": "Phones",
-                    "value": 800
+                    "value": 800,
+                    "initialValue": 800
                 },
                 {
                     "id": "laptops",
                     "label": "Laptops",
-                    "value": 700
+                    "value": 700,
+                    "initialValue": 700
                 }
             ]
         },
@@ -21,16 +24,19 @@
             "id": "furniture",
             "label": "Furniture",
             "value": 1000,
+            "initialValue": 1000,
             "children": [
                 {
                     "id": "tables",
                     "label": "Tables",
-                    "value": 300
+                    "value": 300,
+                    "initialValue": 300
                 },
                 {
                     "id": "chairs",
                     "label": "Chairs",
-                    "value": 700
+                    "value": 700,
+                    "initialValue": 700
                 }
             ]
         }
